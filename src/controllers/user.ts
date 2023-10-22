@@ -1,7 +1,7 @@
 import { random, authentication } from '../helpers/crypto';
 import { createUser, getUserByEmail, updateUserById } from '../db/users';
-import { failed, success } from '../helpers/responses'
-import { generateToken } from '../helpers/crypto'
+import { failed, success } from '../helpers/responses';
+import { generateToken } from '../helpers/crypto';
 import express from 'express';
 
 export const register = async (req: express.Request, res: express.Response) => {

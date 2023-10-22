@@ -8,6 +8,7 @@ servers:
 tags:
   - name: Auth
   - name: Product
+  - name: Email Post
 paths:
   /user/register:
     post:
@@ -191,6 +192,27 @@ paths:
                 $ref: '#/components/schemas/ResponseObjectProductStruct'    
         '401':
           description: Unautorized
+
+  /email:
+    post:
+      tags:
+        - Email Post
+      summary: Send email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailBody'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectEmailStruct'    
+        '401':
+          description: Unautorized
 components:
   schemas:
     User:
@@ -232,6 +254,39 @@ components:
           example: memangbenar
       xml:
         name: user
+
+    EmailBody:
+      type: object
+      properties:
+        to:
+          type: string
+          example: skakmate87@gmail.com
+        subject:
+          type: string
+          example: hii
+        text:
+          type: string
+          example: halo apa kabar
+      xml:
+        name: user
+
+    ResponseObjectEmailStruct:
+      type: object
+      properties:
+        status: 
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        timestamp: 
+          type: string
+          example: 2023-10-21 22:20:56
+        message:
+          type: string
+          example: success send email
+        data: 
+          example: null
     
     AuthBody:
       type: object

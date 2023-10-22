@@ -20,5 +20,14 @@ export const config = {
   },
   secret: {
     encrypt: process.env.SECRET
+  },
+  smtp: {
+    host: process.env.SMTPHOST,
+    port: process.env.SMTPPORT,
+    auth: {
+      user: process.env.SMTPUSER,
+      pass: process.env.SMTPPASS
+    },
+    secure: true
   }
 }
