@@ -4,7 +4,10 @@ dotenv.config();
 export const config = {
   port: process.env.PORT,
   cors: {
-    credentials: true,
+    origin: '0.0.0.0',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   },
   jwt: {
     secret: process.env.JWTSECRET,
