@@ -10,6 +10,7 @@ import requestLogger from './helpers/logger';
 import { config } from './config';
 import specs from './docs/swagger';
 import swaggerUi from 'swagger-ui-express';
+import { dbConn } from './db/connection';
 
 const app = express();
 
@@ -21,14 +22,10 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/', router());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
-
+dbConn();
 
 const server = http.createServer(app)
 
-mongoose.Promise = Promise;
-mongoose.connect(config.db.connectionString);
-mongoose.connection.on('error', (error: Error) => console.log(error));
-
-server.listen(8080, () => {
-  console.log('server running on http://localhost:8080/')
+server.listen(config.port, () => {
+  console.log('server running on http://localhost:'+config.port)
 });
