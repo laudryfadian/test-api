@@ -1,0 +1,370 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: API For Coding Test PT SERA || Laudry Iza Fadian
+  version: 0.1.9
+servers:
+  - url: http://localhost:8080/
+tags:
+  - name: Auth
+  - name: Product
+paths:
+  /user/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBody'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectUserStruct'    
+        '401':
+          description: Unautorized
+  /user/signin:
+    post:
+      tags:
+        - Auth
+      summary: Sign in User to get access token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthBody'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectAuthStruct'    
+        '401':
+          description: Unautorized
+  /product:
+    get:
+      tags: 
+        - Product
+      summary: Get product list.
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'get token in /user/signin to access this endpoint'
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxtokenxxxx
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseArrayProductStruct'  
+        '401':
+          description: Unautorized
+    post:
+      tags:
+        - Product
+      summary: Create a product
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'get token in /user/signin to access this endpoint'
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxtokenxxxx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductBody'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectProductStruct'    
+        '401':
+          description: Unautorized
+  /product/{idProduct}:
+    get:
+      tags: 
+        - Product
+      summary: Find product by idProduct
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'get token in /user/signin to access this endpoint'
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxtokenxxxx
+        - name: idProduct
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectProductStruct'    
+        '401':
+          description: Unautorized
+    put:
+      tags:
+        - Product
+      summary: Update an existing product
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'get token in /user/signin to access this endpoint'
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxtokenxxxx
+        - name: idProduct
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      operationId: updateProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductBody'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectProductStruct'    
+        '401':
+          description: Unautorized
+    delete:
+      tags: 
+        - Product
+      summary: Soft delete product by idProduct
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'get token in /user/signin to access this endpoint'
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxtokenxxxx
+        - name: idProduct
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObjectProductStruct'    
+        '401':
+          description: Unautorized
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: 65337279030ec0de8a3fb686
+        name:
+          type: string
+          example: Laudry
+        email:
+          type: string
+          example: laudry@test.com
+        password:
+          type: string
+          example: yyyyyyyyyyyyyyyy
+        salt:
+          type: string
+          example: xxxxxxxxxxxx
+        isDelete:
+          type: boolean
+          example: false
+      xml:
+        name: user
+
+    UserBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Laudry
+        email:
+          type: string
+          example: laudry@test.com
+        password:
+          type: string
+          example: memangbenar
+      xml:
+        name: user
+    
+    AuthBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: laudry@test.com
+        password:
+          type: string
+          example: memangbenar
+      xml:
+        name: user
+
+    ResponseObjectUserStruct:
+      type: object
+      properties:
+        status: 
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        timestamp: 
+          type: string
+          example: 2023-10-21 22:20:56
+        message:
+          type: string
+          example: successfull
+        data: 
+          $ref: '#/components/schemas/User'
+    
+    ResponseObjectAuthStruct:
+      type: object
+      properties:
+        status: 
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        timestamp: 
+          type: string
+          example: 2023-10-21 22:20:56
+        message:
+          type: string
+          example: successfull
+        data: 
+          type: object
+          properties:
+            token:
+              type: string
+              example: xxtokenxxx
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: 65337279030ec0de8a3fb686
+        name:
+          type: string
+          example: Buku Matematika
+        price:
+          type: integer
+          example: 10000
+        description:
+          type: string
+          example: Buku matematika untuk anak SMP
+      xml:
+        name: product
+
+    ProductBody: 
+      type: object
+      properties:
+        name:
+          type: string
+          example: Buku Matematika
+        price:
+          type: integer
+          example: 10000
+        description:
+          type: string
+          example: Buku matematika untuk anak SMP
+      xml:
+        name: product
+    
+    ResponseObjectProductStruct:
+      type: object
+      properties:
+        status: 
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        timestamp: 
+          type: string
+          example: 2023-10-21 22:20:56
+        message:
+          type: string
+          example: successfull
+        data: 
+          $ref: '#/components/schemas/Product'
+    
+    ResponseArrayProductStruct:
+      type: object
+      properties:
+        status: 
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        timestamp: 
+          type: string
+          example: 2023-10-21 22:20:56
+        message:
+          type: string
+          example: successfull
+        data: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+  
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header
+        
+x-undocumented-schemas:
+  Product: ~ 
+        
+        
+        
